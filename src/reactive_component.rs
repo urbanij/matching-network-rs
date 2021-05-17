@@ -20,9 +20,9 @@ impl ReactiveComponent {
             _ => ComponentType::Wire,
         };
         ReactiveComponent {
-            reactance: reactance,
-            component_type: component_type,
-            frequency: frequency,
+            reactance,
+            component_type,
+            frequency,
         }
     }
 
@@ -36,19 +36,19 @@ impl ReactiveComponent {
 
     pub fn get_value(&self) -> Option<f32> {
 		use std::f32::consts::PI;
-        match self.frequency {
-            Some(f) => {
-                match self.component_type {
-                    ComponentType::L => {
-                        Some(self.reactance / (2.0 * PI * f))
-                    },
-                    ComponentType::C => {
-                        Some(-1.0 / (2.0 * PI * f * self.reactance))
-                    },
-                    ComponentType::Wire => Some(0.0),
-                }
-            },
-            None => None,
+    
+        if let Some(f) = self.frequency {
+            match self.component_type {
+                ComponentType::L => {
+                    Some(self.reactance / (2.0 * PI * f))
+                },
+                ComponentType::C => {
+                    Some(-1.0 / (2.0 * PI * f * self.reactance))
+                },
+                ComponentType::Wire => Some(0.0),
+            }
+        } else {
+            None
         }
     }
 
@@ -68,16 +68,21 @@ impl std::fmt::Display for ReactiveComponent {
             ComponentType::Wire => ans = "Wire", 
         }
 
-        let mut ans = format!("{}\n    X = {} Ω ⇔ B = {} mS", 
+        let mut ans = format!(
+            "{}\n    X = {} Ω ⇔ B = {} mS", 
             ans, 
             self.reactance,
-            self.get_susceptance());
+            self.get_susceptance(),
+        );
 
-        match self.frequency {
-            Some(f) => {
-                ans = format!("{}\n    {:?} = {} H (@ {} Hz)", ans, self.component_type, self.get_value().unwrap(), f);
-            }, 
-            None => { },
+        if let Some(f) = self.frequency {
+            ans = format!(
+                "{}\n    {:?} = {} H (@ {} Hz)", 
+                ans, 
+                self.component_type, 
+                self.get_value().unwrap(), 
+                f,
+            );
         }
         write!(f, "{}", ans)
     }
