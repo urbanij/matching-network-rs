@@ -4,3 +4,4 @@
 mod reactive_component;
 pub use crate::reactive_component::*;
 
+mod tests;

@@ -1,3 +1,4 @@
+use quantiphy_rs::Quantity;
 #[derive(Debug)]
 enum ComponentType {
     L,
@@ -55,34 +56,60 @@ impl ReactiveComponent {
     pub fn get_freq(&self) -> Option<f32> {
         self.frequency
     }
+
+    fn get_component_type_str(&self) -> &str {
+        return match self.component_type {
+            ComponentType::L => "Inductor",
+            ComponentType::C => "Capacitor",
+            ComponentType::Wire => "Wire", 
+        };
+    }
+
 }
 
 
 impl std::fmt::Display for ReactiveComponent {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let ans;
 
-        match self.component_type {
-            ComponentType::L => ans = "Inductor:",
-            ComponentType::C => ans = "Capacitor",
-            ComponentType::Wire => ans = "Wire", 
-        }
+        const USE_QUANTIPHY: bool = true;
 
-        let mut ans = format!(
-            "{}\n    X = {} Ω ⇔ B = {} mS", 
-            ans, 
-            self.reactance,
-            self.get_susceptance(),
-        );
-
-        if let Some(f) = self.frequency {
+        let mut ans;
+        
+        if USE_QUANTIPHY {
             ans = format!(
-                "{}\n    {:?} = {} H (@ {} Hz)", 
-                ans, 
-                self.component_type, 
-                self.get_value().unwrap(), 
-                f,
+                "{}:\n    X = {}Ω ⇔ B = {}mS", 
+                self.get_component_type_str(), 
+                Quantity::from(self.reactance as f64),
+                Quantity::from(self.get_susceptance() as f64), // TODO: FIX this
             );
+
+            if let Some(f) = self.frequency {
+                ans = format!(
+                    "{}\n    {:?} = {}H (@ {}Hz)", 
+                    ans, 
+                    self.component_type, 
+                    Quantity::from(self.get_value().unwrap() as f64), 
+                    Quantity::from(f as f64),
+                );
+            }
+        }
+        else {
+            ans = format!(
+                "{}:\n    X = {:.5} Ω ⇔ B = {:.5} mS",  
+                self.get_component_type_str(), 
+                self.reactance,
+                self.get_susceptance(),
+            );
+
+            if let Some(f) = self.frequency {
+                ans = format!(
+                    "{}\n    {:?} = {:.5} H (@ {:.5} Hz)", 
+                    ans, 
+                    self.component_type, 
+                    self.get_value().unwrap(),
+                    f,
+                );
+            }
         }
         write!(f, "{}", ans)
     }

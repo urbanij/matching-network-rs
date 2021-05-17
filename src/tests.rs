@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use super::reactive_component::ReactiveComponent;
+    use crate::reactive_component::ReactiveComponent;
     use assert_approx_eq::assert_approx_eq;
     #[test]
     fn ind1() {
