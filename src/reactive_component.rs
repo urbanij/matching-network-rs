@@ -7,13 +7,13 @@ enum ComponentType {
 }
 
 #[derive(Debug)]
-pub struct ReactiveComponent {
-    reactance: f32,
+pub struct ReactiveComponent<T> {
+    reactance: T,
     component_type: ComponentType, 
-    frequency: Option<f32>,
+    frequency: Option<T>,
 }
 
-impl ReactiveComponent {
+impl ReactiveComponent<f32> {
     pub fn new(reactance: f32, frequency: Option<f32>) -> Self {
         let component_type = match reactance {
             r if r > 0.0 => ComponentType::L,
@@ -28,9 +28,18 @@ impl ReactiveComponent {
     }
 
     pub fn get_susceptance(&self) -> f32 {
-        // Return equivalent susceptance value in milli Siemens.
+        // Return equivalent susceptance value
+
+        const USE_MILLISIEMENS: bool = false;
+
         match self.component_type {
-            ComponentType::L | ComponentType::C => (-1.0 / self.reactance) * 1e3,    // S -> mS
+            ComponentType::L | ComponentType::C => {
+                if USE_MILLISIEMENS {
+                    (-1.0 / self.reactance) * 1e3   // S -> mS
+                } else {
+                    -1.0 / self.reactance           // S
+                }
+            },
             ComponentType::Wire => std::f32::INFINITY,
         }
     }
@@ -68,7 +77,7 @@ impl ReactiveComponent {
 }
 
 
-impl std::fmt::Display for ReactiveComponent {
+impl std::fmt::Display for ReactiveComponent<f32> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 
         const USE_QUANTIPHY: bool = true;

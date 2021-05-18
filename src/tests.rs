@@ -12,7 +12,7 @@ mod tests {
         let x1 = ReactiveComponent::new(14., Some(13_000_000.0));
         // assert_eq!(x1.value.unwrap(), 171.4*1e-9);
         assert_approx_eq!(x1.get_value().unwrap(), 171.4*1e-9, 1e-3f32);
-        assert_approx_eq!(x1.get_susceptance(), -71.429, 1e-3f32);
+        assert_approx_eq!(x1.get_susceptance(), -71.429e-3, 1e-3f32);
     }
 
 }
