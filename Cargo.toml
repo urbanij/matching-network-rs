@@ -9,4 +9,5 @@ edition = "2018"
 [dependencies]
 # uom = "0.31.1"
 assert_approx_eq = "1.1.0"
-quantiphy-rs = { path = "../quantiphy-rs" }
+# quantiphy-rs = { path = "../quantiphy-rs" }
+dimensioned = "0.7.0"
