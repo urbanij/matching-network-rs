@@ -1,5 +1,7 @@
 use matching_network_rs::*;
 use dimensioned as dim;
+
+#[warn(unused_imports)]
 use dim::si::{
     OHM, // ohm
     SIE, // siemens
@@ -11,14 +13,17 @@ use dim::si::{
 fn main() {
     let mut x1;
     
-    x1 = ReactiveComponent::new(3123. * OHM);
+    // x1 = ReactiveComponent::new(3123. * OHM, None);
+    // println!("{:?}", x1);
+
+    x1 = ReactiveComponent::new(4311.3 * OHM, Some(13.23e6 * HZ));
+    println!("{:?}", x1);
     println!("{}", x1);
-    let x1_resolved = x1.at(100_0000. * HZ);
-    println!("{}", x1_resolved);
 
 
-    // x1 = ReactiveComponent::new(4311.3, Some(13.23e6));
-    // println!("{}", x1);    
+    let comp1 = Component::L(Some(32.1*H));
+    println!("{}", comp1);
+
 
     // x1 = ReactiveComponent::new(0.0, None);
     // println!("{}", x1);    

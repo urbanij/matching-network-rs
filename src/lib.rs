@@ -2,6 +2,6 @@
 // $ matching_network --from 100 --to 43+12j --freq 32e6
 
 mod reactive_component;
-pub use crate::reactive_component::*;
-
 mod tests;
+
+pub use crate::reactive_component::*;
