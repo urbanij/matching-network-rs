@@ -10,7 +10,7 @@ pub enum Component {
     Wire
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct ReactiveComponent {
     reactance: dim::si::Ohm<f64>,
     frequency: Option<dim::si::Hertz<f64>>,
@@ -46,20 +46,20 @@ impl ReactiveComponent {
         }
     }
 
-    
+
     /************ private methods ************/
 
     /// Given a frequency, resolve inductance [Henry]
-    pub fn _get_inductance_value(&self) -> Option<dim::si::Henry<f64>> {
+    fn _get_inductance_value(&self) -> Option<dim::si::Henry<f64>> {
         Some(self.reactance / (2.0 * PI * self.frequency.unwrap()))
     }
     
     /// Given a frequency, resolve capacitance [Farad]
-    pub fn _get_capacitance_value(&self) -> Option<dim::si::Farad<f64>> {
+    fn _get_capacitance_value(&self) -> Option<dim::si::Farad<f64>> {
         Some(-1.0 / (2.0 * PI * self.frequency.unwrap() * self.reactance))
     }
 
-    pub fn _get_component(&self) -> Component {
+    fn _get_component(&self) -> Component {
         match self.get_reactance() {
             r if r > 0.0 * dim::si::OHM => {
                 Component::L(self._get_inductance_value())
@@ -71,7 +71,7 @@ impl ReactiveComponent {
         }
     }
 
-    pub fn _get_component_str(&self) -> &str {
+    fn _get_component_str(&self) -> &str {
         match self._get_component() {
             Component::L(_) => "Inductor",
             Component::C(_) => "Capacitor",
