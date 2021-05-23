@@ -3,7 +3,7 @@
 use dimensioned as dim;
 use std::{f64::consts::PI};
 
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 pub enum Component {
     L(Option<dim::si::Henry<f64>>),
     C(Option<dim::si::Farad<f64>>),
@@ -18,7 +18,10 @@ pub struct ReactiveComponent {
 
 impl ReactiveComponent {
     
-    pub fn new(reactance: dim::si::Ohm<f64>, frequency: Option<dim::si::Hertz<f64>>) -> Self {
+    pub fn new(
+        reactance: dim::si::Ohm<f64>, 
+        frequency: Option<dim::si::Hertz<f64>>
+    ) -> Self {
         Self {
             reactance,
             frequency,
@@ -37,7 +40,8 @@ impl ReactiveComponent {
     pub fn get_susceptance(&self) -> dim::si::Siemens<f64> {
         // Return equivalent susceptance value
         match self._get_component() {
-            Component::L(_) | Component::C(_) => {
+            Component::L(_) 
+            | Component::C(_) => {
                 -1.0 / self.reactance
             },
             Component::Wire => {
@@ -51,12 +55,12 @@ impl ReactiveComponent {
 
     /// Given a frequency, resolve inductance [Henry]
     fn _get_inductance_value(&self) -> Option<dim::si::Henry<f64>> {
-        Some(self.reactance / (2.0 * PI * self.frequency.unwrap()))
+        self.frequency.map(|f| self.reactance / (2.0 * PI * f))
     }
     
     /// Given a frequency, resolve capacitance [Farad]
     fn _get_capacitance_value(&self) -> Option<dim::si::Farad<f64>> {
-        Some(-1.0 / (2.0 * PI * self.frequency.unwrap() * self.reactance))
+        self.frequency.map(|f| -1.0 / (2.0 * PI * f * self.reactance))
     }
 
     fn _get_component(&self) -> Component {
@@ -88,18 +92,18 @@ impl std::fmt::Display for ReactiveComponent {
         let mut ans;
     
         ans = format!(
-            "{}:\n    X = {:.5} ⇔ B = {:.5}",  
+            "{}:\n    X = {:.5} Ω ⇔ B = {:.5} S",  
             self._get_component_str(), 
-            self.get_reactance(),
-            self.get_susceptance(),
+            self.get_reactance() / dim::si::OHM,
+            self.get_susceptance() / dim::si::SIE,
         );
 
         if let Some(freq) = self.frequency {
             ans = format!(
-                "{}\n    {} (@ {:.5?})", 
+                "{}\n    {} (@ {:.5?} Hz)", 
                 ans, 
                 self._get_component(),
-                freq,
+                freq / dim::si::HZ,
             );
         }
     
@@ -112,16 +116,16 @@ impl std::fmt::Display for ReactiveComponent {
 impl std::fmt::Display for Component {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         
-        let ans = match self {
+        let ans = match *self {
             Component::L(val) => {
                 match val {
-                    Some(v) => format!("L = {}", v),
+                    Some(v) => format!("L = {} H", v / dim::si::H),
                     None => "L".to_string(),
                 }
             },
             Component::C(val) => {
                 match val {
-                    Some(v) => format!("C = {}", v),
+                    Some(v) => format!("C = {} F", v / dim::si::F),
                     None => "C".to_string(),
                 }
             },
