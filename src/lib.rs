@@ -3,5 +3,8 @@
 
 mod reactive_component;
 mod tests;
+mod matching_network;
+
 
 pub use crate::reactive_component::*;
+pub use crate::matching_network::*;
