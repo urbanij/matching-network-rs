@@ -25,6 +25,7 @@ pub struct MatchingNetwork {
     solutions: Vec<Solution>,
 }
 
+
 impl MatchingNetwork {
     pub fn new(
         z1: Complex<Ohm<f64>>,
@@ -45,7 +46,7 @@ impl MatchingNetwork {
         todo!()
     }
 
-    pub fn solve(&mut self) -> Self {
+    pub fn solve(&mut self) -> Vec<Solution> {
 
         let mut solutions = vec![];
         
@@ -108,32 +109,29 @@ impl MatchingNetwork {
             }
         }
         
-        MatchingNetwork {
-            z1: self.z1,
-            z2: self.z2,
-            solutions,
-        }
+        solutions
     }
 }
 
 
-/*
-impl std::fmt::Display for Complex<dim::si::Ohm<f64>> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let ans = format!("aa");
-        write!(f, "{}", ans)
-    }
-}
-*/
 impl std::fmt::Display for MatchingNetwork {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 
         let mut ans;
-    
+
+        let z1_without_uom = Complex::new(
+            self.z1.re.value_unsafe,
+            self.z1.im.value_unsafe,
+        );
+        let z2_without_uom = Complex::new(
+            self.z2.re.value_unsafe,
+            self.z2.im.value_unsafe,
+        );
+
         ans = format!(
-            "From {:?} Ω to {:?} Ω",
-            self.z1, // / dim::si::OHM, 
-            self.z2, // / dim::si::OHM,
+            "{} Ω ==> {} Ω",
+            z1_without_uom, // / dim::si::OHM, 
+            z2_without_uom, // / dim::si::OHM,
         );
 
         // if let Some(freq) = self.frequency {

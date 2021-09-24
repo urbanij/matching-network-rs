@@ -19,16 +19,24 @@ fn main() {
         z2
     );
 
-
-
     println!("{}", mn);
-    let solutions = mn
-        .solve()
-        .eval_at(10000.0 * dim::si::HZ);
 
-    println!("solutions: {:?}", solutions);
+    println!("solutions: {:?}", 
+        mn.solve()
+    );
+
+    // println!("solutions: {}", 
+    //     mn
+    //     .solve()
+    //     .eval_at(10000.0 * dim::si::HZ)
+    // );
+    
 
     
+
+
+    /*
+
     let mut x1;
     
     // x1 = ReactiveComponent::new(3123. * OHM, None);
@@ -48,5 +56,6 @@ fn main() {
     x1 = ReactiveComponent::new(-430.1 * dim::si::OHM, Some(120_000.0 * dim::si::HZ));
     println!("{}", x1);    
     
+    */
 
 }
