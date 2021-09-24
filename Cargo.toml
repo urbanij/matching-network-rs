@@ -1,14 +1,20 @@
 [package]
 name = "matching-network-rs"
-version = "0.1.0"
+version = "0.0.1"
 authors = ["Francesco Urbani <francescourbanidue@gmail.com>"]
 edition = "2018"
+description = "Lumped parameters matching network solver"
+documentation = "https://docs.rs/matching-network-rs"
+readme = "README.md"
+keywords = ["lumped parameters", "matching networks", "RF electronics"]
+categories = ["engineering", "circuits"]
+license = "MIT"
+repository = "https://github.com/urbanij/matching-network-rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 # uom = "0.31.1"
 assert_approx_eq = "1.1.0"
-# quantiphy-rs = { path = "../quantiphy-rs" }
 dimensioned = "0.7.0"
 num = "0.4.0"
