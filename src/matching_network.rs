@@ -115,3 +115,36 @@ impl MatchingNetwork {
         }
     }
 }
+
+
+/*
+impl std::fmt::Display for Complex<dim::si::Ohm<f64>> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let ans = format!("aa");
+        write!(f, "{}", ans)
+    }
+}
+*/
+impl std::fmt::Display for MatchingNetwork {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+
+        let mut ans;
+    
+        ans = format!(
+            "From {:?} Ω to {:?} Ω",
+            self.z1, // / dim::si::OHM, 
+            self.z2, // / dim::si::OHM,
+        );
+
+        // if let Some(freq) = self.frequency {
+        //     ans = format!(
+        //         "{}\n    {} (@ {:.5?} Hz)", 
+        //         ans, 
+        //         self._get_component(),
+        //         freq / dim::si::HZ,
+        //     );
+        // }
+    
+        write!(f, "{}", ans)
+    }
+}

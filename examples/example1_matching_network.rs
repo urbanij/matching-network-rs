@@ -21,7 +21,7 @@ fn main() {
 
 
 
-    println!("{:?}", mn);
+    println!("{}", mn);
     let solutions = mn
         .solve()
         .eval_at(10000.0 * dim::si::HZ);
