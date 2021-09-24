@@ -1,6 +1,6 @@
 [package]
 name = "matching-network-rs"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Francesco Urbani <francescourbanidue@gmail.com>"]
 edition = "2018"
 description = "Lumped parameters matching network solver"

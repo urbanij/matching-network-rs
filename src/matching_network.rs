@@ -42,11 +42,23 @@ impl MatchingNetwork {
         self.solutions.clone()
     }
 
-    pub fn eval_at(&self, freq: dim::si::Hertz<f64>) -> Vec<f64> {
-        todo!()
+    pub fn eval_at(&self, freq: dim::si::Hertz<f64>) -> () {
+        println!("# solutions: {}", self.solutions.len());
+
+        for solution in self.solutions.iter() {
+            println!("\n{}", 
+                match solution.sol_type {
+                    MatchingNetworkConfig::SeriesShunt => "series-shunt",
+                    MatchingNetworkConfig::ShuntSeries => "shunt-series",
+                }
+            );
+
+            println!("\tX = {:.5} Ω", solution.shunt_elem.value_unsafe);
+            println!("\tX = {:.5} Ω", solution.series_elem.value_unsafe);
+        }
     }
 
-    pub fn solve(&mut self) -> Vec<Solution> {
+    pub fn solve(mut self) -> Self {
 
         let mut solutions = vec![];
         
@@ -108,8 +120,16 @@ impl MatchingNetwork {
                 solutions.push(sol2);
             }
         }
+
+        self.solutions = solutions;
         
-        solutions
+        self
+
+        // MatchingNetwork {
+        //     z1: self.z1,
+        //     z2: self.z2,
+        //     solutions,
+        // }
     }
 }
 

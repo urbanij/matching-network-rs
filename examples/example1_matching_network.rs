@@ -10,26 +10,29 @@ fn main() {
         0.0 * dim::si::OHM);
 
     let z2 = Complex::new(
-            20.0 * dim::si::OHM,
-            43.0 * dim::si::OHM);
+            43.0 * dim::si::OHM,
+            12.0 * dim::si::OHM);
     
     
-    let mut mn = MatchingNetwork::new(
+    let mut mn1 = MatchingNetwork::new(
         z1,
         z2
     );
+    let mn2 = mn1.clone();
 
-    println!("{}", mn);
+
+    println!("{}", mn1);
 
     println!("solutions: {:?}", 
-        mn.solve()
+        mn1.solve()
     );
 
-    // println!("solutions: {}", 
-    //     mn
-    //     .solve()
-    //     .eval_at(10000.0 * dim::si::HZ)
-    // );
+    
+
+    
+    mn2.solve()
+       .eval_at(32e6 * dim::si::HZ);
+
     
 
     
